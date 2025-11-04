@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
 
-require_trusted_proxy_access();
-
+$viaTrustedProxy = is_trusted_proxy_request();
 $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? 'inconnu';
 $forwardedFor = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? 'non défini';
 $host = $_SERVER['HTTP_HOST'] ?? 'non défini';
 $via = $_SERVER['HTTP_VIA'] ?? 'non défini';
 $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'non défini';
 $forwardedPort = $_SERVER['HTTP_X_FORWARDED_PORT'] ?? 'non défini';
+$configFileExists = is_file(__DIR__ . '/../.env');
+
+if (!$viaTrustedProxy) {
+    http_response_code(403);
+}
 
 render_header('Proxy Only Lab', 'proxy');
 ?>
@@ -24,9 +28,15 @@ render_header('Proxy Only Lab', 'proxy');
                     Si vous voyez cette page via l'URL réelle du serveur Apache, la configuration n'est pas correcte.
                     Elle doit être accessible uniquement lorsqu'une requête transite par le reverse proxy déclaré.
                 </p>
-                <div class="alert alert-success">
-                    Accès autorisé via le proxy <strong><?= htmlspecialchars($remoteAddr) ?></strong>.
-                </div>
+                <?php if ($viaTrustedProxy): ?>
+                    <div class="alert alert-success">
+                        Accès autorisé via le proxy <strong><?= htmlspecialchars($remoteAddr) ?></strong>.
+                    </div>
+                <?php else: ?>
+                    <div class="alert alert-warning">
+                        Accès direct détecté depuis <strong><?= htmlspecialchars($remoteAddr) ?></strong>. Configurez <code>TRUSTED_PROXY_IPS</code> pour autoriser votre reverse proxy.
+                    </div>
+                <?php endif; ?>
                 <h2 class="h6 text-uppercase text-muted">Check-list proposée</h2>
                 <ol class="small text-muted">
                     <li>Depuis le reverse proxy, appeler cette page et vérifier qu'elle s'affiche (statut HTTP 200).</li>
