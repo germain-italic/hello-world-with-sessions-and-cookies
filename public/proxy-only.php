@@ -34,6 +34,15 @@ render_header('Proxy Only Lab', 'proxy');
                     <li>S'assurer que l'IP du proxy correspond à la configuration (<code><?= htmlspecialchars(implode(', ', TRUSTED_PROXY_IPS)) ?></code>).</li>
                     <li>Contrôler les en-têtes <code>Via</code> et <code>X-Forwarded-*</code> pour documenter le chemin de requête.</li>
                 </ol>
+                <div class="alert alert-info mt-4">
+                    <strong>Configurer les IP autorisées :</strong>
+                    <ol class="small text-muted mb-0">
+                        <li>Copier le fichier <code>.env.dist</code> vers <code>.env</code> à la racine du projet.</li>
+                        <li>Éditer <code>.env</code> et renseigner <code>TRUSTED_PROXY_IPS</code> (liste d'IP séparées par des virgules), par exemple&nbsp;:<br>
+                            <code>TRUSTED_PROXY_IPS=51.75.251.128,203.0.113.10</code></li>
+                        <li>Redémarrer Apache/PHP-FPM si nécessaire pour recharger la configuration.</li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
