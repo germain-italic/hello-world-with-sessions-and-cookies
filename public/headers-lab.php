@@ -10,7 +10,14 @@ $securityHeaders = [
     'X-Content-Type-Options' => 'nosniff',
     'Referrer-Policy' => 'strict-origin-when-cross-origin',
     'Permissions-Policy' => 'geolocation=(), microphone=(), camera=()',
-    'Content-Security-Policy' => "default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+    'Content-Security-Policy' => implode(' ', [
+        "default-src 'self'",
+        "img-src 'self' data:",
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+        "style-src 'self' 'unsafe-inline' https://use.typekit.net https://cdn.jsdelivr.net",
+        "font-src 'self' data: https://use.typekit.net https://p.typekit.net",
+        "connect-src 'self'",
+    ]),
 ];
 
 foreach ($securityHeaders as $name => $value) {
