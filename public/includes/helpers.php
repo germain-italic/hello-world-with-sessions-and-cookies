@@ -269,6 +269,9 @@ function render_header(string $title, string $active = ''): void
                         <a class="nav-link <?= $active === 'rewrite' ? 'active' : '' ?>" href="rewrite-lab.php">Rewrite Lab</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link <?= $active === 'cors' ? 'active' : '' ?>" href="cors-lab.php">CORS Lab</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link <?= $active === 'gzip' ? 'active' : '' ?>" href="gzip-lab.php">GZIP Lab</a>
                     </li>
                     <li class="nav-item">

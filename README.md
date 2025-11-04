@@ -10,6 +10,7 @@ Mini site de test en PHP/Apache pour valider le comportement d'un reverse proxy 
 - Upload multi-part avec stockage sur disque et liste des fichiers déposés.
 - Download de fichier statique et download de fichiers uploadés (types exécutables bloqués côté upload).
 - Page de diagnostic HTTPS/SSL pour contrôler les en-têtes `X-Forwarded-*` et la terminaison TLS.
+- Page de test CORS (simple/pré-vol) pour observer les en-têtes `Access-Control-*` via le proxy.
 - Page de traçabilité IP & user agent pour comparer REMOTE_ADDR et les en-têtes `X-Forwarded-For` / `X-Real-IP`.
 - Laboratoire d'URL rewriting (règles `.htaccess`) avec scénarios de test prêts à l'emploi.
 - Zone « proxy-only » accessible uniquement via le reverse proxy déclaré (403 en accès direct).
@@ -75,10 +76,11 @@ Points de contrôle recommandés :
 5. **Download** : récupérer `proxy-test.txt` puis comparer la somme de contrôle en sortie du reverse proxy.
 6. **HTTPS** : ouvrir « Check HTTPS » et confirmer la détection d'HTTPS via les variables serveur et les en-têtes `X-Forwarded-*`.
 7. **URL rewriting** : utiliser « Rewrite Lab » et tester les liens `/rewrite/...` pour vérifier que `.htaccess` est interprété correctement.
-8. **Traçabilité IP** : ouvrir « Trace IP » pour comparer l’IP client, celle du proxy et l’ordre des en-têtes `X-Forwarded-For`.
-9. **Compression** : ouvrir « GZIP Lab » pour vérifier l'encodage (`Content-Encoding`, `Via`, négociation `Accept-Encoding`).
-10. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
-11. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
+8. **CORS** : ouvrir « CORS Lab », exécuter les scénarios (`open`, `strict`, `credentials`) et valider les en-têtes `Access-Control-*` en curl/OPTIONS.
+9. **Traçabilité IP** : ouvrir « Trace IP » pour comparer l’IP client, celle du proxy et l’ordre des en-têtes `X-Forwarded-For`.
+10. **Compression** : ouvrir « GZIP Lab » pour vérifier l'encodage (`Content-Encoding`, `Via`, négociation `Accept-Encoding`).
+11. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
+12. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
 
 ## Structure
 
@@ -87,6 +89,7 @@ Points de contrôle recommandés :
 - `uploads/` : stockage des fichiers déposés (ignored par Git).
 - `downloads/` : fichier statique de test.
 - `public/.htaccess` : règles RewriteRule utilisées par le laboratoire « Rewrite Lab ».
+- `public/cors-test.php` : endpoint JSON configurables pour les scénarios CORS.
 
 ## Maintenance
 
@@ -96,3 +99,4 @@ Points de contrôle recommandés :
 - L'upload est plafonné à 5 MB, les extensions exécutables (`.php`, `.sh`, `.exe`, etc.) sont rejetées et les fichiers sont stockés hors racine web (`uploads/`) ; les téléchargements passent via `download-upload.php` avec `Content-Disposition: attachment` et `X-Content-Type-Options: nosniff`.
 - Le laboratoire rewrite nécessite `mod_rewrite` et `AllowOverride All` sur le vhost pour que `.htaccess` soit pris en compte.
 - Dupliquez `.env.dist` vers `.env` et renseignez `TRUSTED_PROXY_IPS` (liste d'IP séparées par des virgules) pour restreindre la zone proxy-only aux reverse proxies autorisés.
+- Les endpoints CORS sont servis par `cors-test.php`; adaptez les en-têtes ajoutés côté proxy si celui-ci gère CORS (ex : `proxy_hide_header` / `add_header`).

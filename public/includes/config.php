@@ -82,6 +82,11 @@ const TEST_STEPS = [
         'link' => 'rewrite-lab.php',
     ],
     [
+        'title' => 'Contrôles CORS',
+        'description' => 'Valider les en-têtes Access-Control-* et les requêtes pré-vol via le reverse proxy.',
+        'link' => 'cors-lab.php',
+    ],
+    [
         'title' => 'Traçabilité IP',
         'description' => 'Comparer l\'IP du visiteur, du proxy et la chaîne d\'en-têtes Forwarded/X-Forwarded-For.',
         'link' => 'network-trace.php',

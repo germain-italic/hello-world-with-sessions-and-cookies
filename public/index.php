@@ -33,6 +33,8 @@ $proxyIp = $remoteAddr;
 $viaTrustedProxy = is_trusted_proxy_request();
 $contentEncoding = $_SERVER['HTTP_CONTENT_ENCODING'] ?? '';
 $viaHeader = $_SERVER['HTTP_VIA'] ?? '';
+$requestOrigin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$preflightMethod = $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] ?? '';
 
 $statusSummaries = [
     [
@@ -82,6 +84,16 @@ $statusSummaries = [
         'badge_text' => $viaTrustedProxy ? 'ok' : 'direct',
         'link' => 'proxy-only.php',
         'link_label' => 'Tester la zone proxy-only',
+    ],
+    [
+        'title' => 'CORS',
+        'state' => $requestOrigin
+            ? 'Requête depuis origin : ' . $requestOrigin . ($preflightMethod ? ' · Pré-vol ' . $preflightMethod : '')
+            : 'Aucune origine externe détectée (testez via curl/fetch).',
+        'badge_variant' => $requestOrigin ? 'info' : 'secondary',
+        'badge_text' => $requestOrigin ? 'origin' : 'n/a',
+        'link' => 'cors-lab.php',
+        'link_label' => 'Explorer CORS Lab',
     ],
     [
         'title' => 'Compression',
