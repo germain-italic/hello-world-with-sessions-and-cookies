@@ -73,6 +73,15 @@ render_header('Accueil', 'home');
                 </form>
             </div>
         </div>
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h2 class="h5">Vérification HTTPS</h2>
+                <p class="small text-muted">
+                    Depuis le proxy, ouvrez la page de diagnostic pour contrôler les en-têtes TLS (`X-Forwarded-*`) et confirmer que la connexion est bien servie en HTTPS.
+                </p>
+                <a class="btn btn-outline-secondary w-100" href="ssl-check.php">Ouvrir Check HTTPS</a>
+            </div>
+        </div>
     </div>
 </div>
 <?php

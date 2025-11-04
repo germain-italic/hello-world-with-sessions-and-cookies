@@ -62,6 +62,10 @@ const TEST_STEPS = [
         'description' => 'Télécharger le fichier de test pour vérifier les entêtes et l\'intégrité du contenu.',
     ],
     [
+        'title' => 'Validation HTTPS',
+        'description' => 'Contrôler que la connexion proxifiée est bien servie en HTTPS et que les en-têtes X-Forwarded-* sont cohérents.',
+    ],
+    [
         'title' => 'Déconnexion',
         'description' => 'Se déconnecter et confirmer la suppression de la session et du cookie, puis retenter un accès direct.',
     ],

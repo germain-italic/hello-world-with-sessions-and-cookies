@@ -213,6 +213,9 @@ function render_header(string $title, string $active = ''): void
                     <li class="nav-item">
                         <a class="nav-link <?= $active === 'transfer' ? 'active' : '' ?>" href="transfer-lab.php">Upload &amp; Download</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active === 'ssl' ? 'active' : '' ?>" href="ssl-check.php">Check HTTPS</a>
+                    </li>
                 </ul>
                 <div class="d-flex gap-2">
                     <a class="btn btn-outline-light btn-sm" href="logout.php">Déconnexion</a>

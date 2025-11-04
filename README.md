@@ -9,6 +9,7 @@ Mini site de test en PHP/Apache pour valider le comportement d'un reverse proxy 
 - Connexion par cookie JSON personnalisé (lecture, rafraîchissement, mutation, suppression).
 - Upload multi-part avec stockage sur disque et liste des fichiers déposés.
 - Download de fichier statique et download de fichiers uploadés (types exécutables bloqués côté upload).
+- Page de diagnostic HTTPS/SSL pour contrôler les en-têtes `X-Forwarded-*` et la terminaison TLS.
 - Bouton de déconnexion qui purge session et cookie (regénération d'identifiant de session lors du login).
 - UI basée sur Bootstrap 5 pour une ergonomie rapide.
 
@@ -68,7 +69,8 @@ Points de contrôle recommandés :
 3. **Cookie custom** : lancer le parcours cookie, modifier manuellement le JSON dans le navigateur (ex. via DevTools) puis observer la réaction côté serveur.
 4. **Upload** : déposer un fichier >1 MB pour contrôler la taille via le proxy et vérifier l'écriture sur disque.
 5. **Download** : récupérer `proxy-test.txt` puis comparer la somme de contrôle en sortie du reverse proxy.
-6. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
+6. **HTTPS** : ouvrir « Check HTTPS » et confirmer la détection d'HTTPS via les variables serveur et les en-têtes `X-Forwarded-*`.
+7. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
 
 ## Structure
 
