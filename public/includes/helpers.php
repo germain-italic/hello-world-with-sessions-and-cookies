@@ -250,33 +250,32 @@ function render_header(string $title, string $active = ''): void
                     <li class="nav-item">
                         <a class="nav-link <?= $active === 'home' ? 'active' : '' ?>" aria-current="page" href="index.php">Accueil</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'session' ? 'active' : '' ?>" href="session-dashboard.php">Session PHP</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'cookie' ? 'active' : '' ?>" href="cookie-dashboard.php">Cookie</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'transfer' ? 'active' : '' ?>" href="transfer-lab.php">Upload &amp; Download</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'ssl' ? 'active' : '' ?>" href="ssl-check.php">Check HTTPS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'network' ? 'active' : '' ?>" href="network-trace.php">Trace IP</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'rewrite' ? 'active' : '' ?>" href="rewrite-lab.php">Rewrite Lab</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'cors' ? 'active' : '' ?>" href="cors-lab.php">CORS Lab</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'gzip' ? 'active' : '' ?>" href="gzip-lab.php">GZIP Lab</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $active === 'proxy' ? 'active' : '' ?>" href="proxy-only.php">Proxy Only</a>
-                    </li>
+                    <?php foreach (TEST_CATEGORIES as $category): ?>
+                        <?php
+                        $categoryActive = false;
+                        foreach ($category['items'] as $item) {
+                            if ($active === $item['key']) {
+                                $categoryActive = true;
+                                break;
+                            }
+                        }
+                        $dropdownId = 'nav-' . $category['key'];
+                        ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle <?= $categoryActive ? 'active' : '' ?>" href="#" id="<?= htmlspecialchars($dropdownId) ?>" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?= htmlspecialchars($category['title']) ?>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="<?= htmlspecialchars($dropdownId) ?>">
+                                <?php foreach ($category['items'] as $item): ?>
+                                    <li>
+                                        <a class="dropdown-item <?= $active === $item['key'] ? 'active' : '' ?>" href="<?= htmlspecialchars($item['link']) ?>">
+                                            <?= htmlspecialchars($item['title']) ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
                 <div class="d-flex gap-2">
                     <a class="btn btn-outline-light btn-sm" href="logout.php">Déconnexion</a>
@@ -315,21 +314,20 @@ function render_footer(): void
 
 function render_test_steps(): void
 {
-    ?>
-    <ol class="list-group list-group-numbered">
-        <?php foreach (TEST_STEPS as $step): ?>
-            <li class="list-group-item">
-                <?php if (!empty($step['link'])): ?>
-                    <a class="fw-semibold d-inline-flex align-items-center gap-2 text-decoration-none" href="<?= htmlspecialchars($step['link']) ?>">
-                        <?= htmlspecialchars($step['title']) ?>
-                        <span class="badge bg-light text-dark border">ouvrir</span>
-                    </a>
-                <?php else: ?>
-                    <div class="fw-semibold"><?= htmlspecialchars($step['title']) ?></div>
-                <?php endif; ?>
-                <div class="small text-muted"><?= htmlspecialchars($step['description']) ?></div>
-            </li>
-        <?php endforeach; ?>
-    </ol>
-    <?php
+    foreach (TEST_CATEGORIES as $category): ?>
+        <div class="mb-4">
+            <h3 class="h6 text-uppercase text-muted mb-2"><?= htmlspecialchars($category['title']) ?></h3>
+            <ol class="list-group list-group-numbered">
+                <?php foreach ($category['items'] as $item): ?>
+                    <li class="list-group-item">
+                        <a class="fw-semibold d-inline-flex align-items-center gap-2 text-decoration-none" href="<?= htmlspecialchars($item['link']) ?>">
+                            <?= htmlspecialchars($item['title']) ?>
+                            <span class="badge bg-light text-dark border">ouvrir</span>
+                        </a>
+                        <div class="small text-muted"><?= htmlspecialchars($item['description']) ?></div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </div>
+    <?php endforeach;
 }

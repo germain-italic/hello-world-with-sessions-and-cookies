@@ -11,10 +11,13 @@ Mini site de test en PHP/Apache pour valider le comportement d'un reverse proxy 
 - Download de fichier statique et download de fichiers uploadés (types exécutables bloqués côté upload).
 - Page de diagnostic HTTPS/SSL pour contrôler les en-têtes `X-Forwarded-*` et la terminaison TLS.
 - Page de test CORS (simple/pré-vol) pour observer les en-têtes `Access-Control-*` via le proxy.
+- LAB sécurité/en-têtes (CSP, HSTS, cache, ETag/Last-Modified, HTTP/2, keep-alive).
+- Page Basic Auth confirmant le transit de l'en-tête `Authorization`.
 - Page de traçabilité IP & user agent pour comparer REMOTE_ADDR et les en-têtes `X-Forwarded-For` / `X-Real-IP`.
-- Laboratoire d'URL rewriting (règles `.htaccess`) avec scénarios de test prêts à l'emploi.
+- Laboratoire d'URL rewriting (règles `.htaccess`) avec scénarios de test prêts à l'emploi + détection de liens absolus.
 - Zone « proxy-only » accessible uniquement via le reverse proxy déclaré (403 en accès direct).
-- Page de diagnostic compression (GZIP/Brotli) pour vérifier la négociation et l'application côté host/proxy.
+- Page de diagnostic compression (GZIP/Brotli) pour vérifier la négociation, l'encodage et la cohérence Content-Length.
+- Tests de redirection (301/302/303/307/308) et module de robustesse/fuzz sur les URLs.
 - Bouton de déconnexion qui purge session et cookie (regénération d'identifiant de session lors du login).
 - UI basée sur Bootstrap 5 pour une ergonomie rapide.
 
@@ -75,12 +78,16 @@ Points de contrôle recommandés :
 4. **Upload** : déposer un fichier >1 MB pour contrôler la taille via le proxy et vérifier l'écriture sur disque.
 5. **Download** : récupérer `proxy-test.txt` puis comparer la somme de contrôle en sortie du reverse proxy.
 6. **HTTPS** : ouvrir « Check HTTPS » et confirmer la détection d'HTTPS via les variables serveur et les en-têtes `X-Forwarded-*`.
-7. **URL rewriting** : utiliser « Rewrite Lab » et tester les liens `/rewrite/...` pour vérifier que `.htaccess` est interprété correctement.
-8. **CORS** : ouvrir « CORS Lab », exécuter les scénarios (`open`, `strict`, `credentials`) et valider les en-têtes `Access-Control-*` en curl/OPTIONS.
-9. **Traçabilité IP** : ouvrir « Trace IP » pour comparer l’IP client, celle du proxy et l’ordre des en-têtes `X-Forwarded-For`.
-10. **Compression** : ouvrir « GZIP Lab » pour vérifier l'encodage (`Content-Encoding`, `Via`, négociation `Accept-Encoding`).
-11. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
-12. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
+7. **Sécurité des en-têtes** : ouvrir « Headers & Cache » et vérifier la présence des en-têtes CSP/HSTS/Cache-Control, ETag, Last-Modified.
+8. **Basic Auth** : tester « Basic Auth Lab » avec les identifiants fournis et vérifier le transit de `Authorization`.
+9. **CORS** : ouvrir « CORS Lab », exécuter les scénarios (`open`, `strict`, `credentials`) et valider les en-têtes `Access-Control-*` en curl/OPTIONS.
+10. **Sessions & Cookies** : vérifier les pages « Session PHP » et « Session Cookie » après login, puis réaliser un upload/download.
+11. **Routage** : utiliser « Rewrite Lab », « Liens absolus » et « Redirections » pour valider la cohérence des URLs.
+12. **Traçabilité IP** : ouvrir « Trace IP » pour comparer l’IP client, celle du proxy et l’ordre des en-têtes `X-Forwarded-For`.
+13. **Compression** : ouvrir « GZIP Lab » pour vérifier l'encodage (`Content-Encoding`, `Content-Length`, `Via`).
+14. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
+15. **Robustesse** : utiliser « Fuzz Lab » pour envoyer des chemins encodés/suspects et observer les normalisations.
+16. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
 
 ## Structure
 
@@ -89,7 +96,9 @@ Points de contrôle recommandés :
 - `uploads/` : stockage des fichiers déposés (ignored par Git).
 - `downloads/` : fichier statique de test.
 - `public/.htaccess` : règles RewriteRule utilisées par le laboratoire « Rewrite Lab ».
-- `public/cors-test.php` : endpoint JSON configurables pour les scénarios CORS.
+- `public/cors-test.php` : endpoint JSON configurable pour les scénarios CORS.
+- `public/headers-lab.php`, `public/basic-auth-lab.php`, `public/gzip-lab.php` : diagnostics sécurité/en-têtes.
+- `public/absolute-links-lab.php`, `public/redirect-lab.php`, `public/redirect-test.php`, `public/fuzz-lab.php` : routage, redirections et robustesse.
 
 ## Maintenance
 

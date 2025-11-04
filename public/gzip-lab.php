@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
 
+ob_start();
+
 $acceptEncoding = $_SERVER['HTTP_ACCEPT_ENCODING'] ?? '';
 $contentEncoding = $_SERVER['HTTP_CONTENT_ENCODING'] ?? '';
 $transferEncoding = $_SERVER['HTTP_TRANSFER_ENCODING'] ?? '';
@@ -13,6 +15,7 @@ $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
 
 $serverEncoding = $_SERVER['HTTP_X_CONTENT_ENCODING'] ?? '';
 $proxyEncoding = $_SERVER['HTTP_X_PROXY_CONTENT_ENCODING'] ?? '';
+$requestContentLength = $_SERVER['HTTP_CONTENT_LENGTH'] ?? '';
 
 $gzipNegotiated = stripos($acceptEncoding, 'gzip') !== false;
 $brotliNegotiated = stripos($acceptEncoding, 'br') !== false;
@@ -55,7 +58,7 @@ render_header('Compression GZIP', 'gzip');
         </div>
     </div>
     <div class="col-12 col-xl-5">
-        <div class="card shadow-sm h-100">
+        <div class="card shadow-sm h-100 mb-4">
             <div class="card-body">
                 <h2 class="h5">En-têtes observés</h2>
                 <dl class="row small mb-0">
@@ -70,6 +73,9 @@ render_header('Compression GZIP', 'gzip');
 
                     <dt class="col-sm-5">Transfer-Encoding</dt>
                     <dd class="col-sm-7"><code><?= htmlspecialchars($transferEncoding ?: 'non fourni') ?></code></dd>
+
+                    <dt class="col-sm-5">Content-Length (requête)</dt>
+                    <dd class="col-sm-7"><code><?= htmlspecialchars($requestContentLength ?: 'non fourni') ?></code></dd>
 
                     <dt class="col-sm-5">Via</dt>
                     <dd class="col-sm-7"><code><?= htmlspecialchars($via ?: 'non fourni') ?></code></dd>
@@ -99,7 +105,42 @@ render_header('Compression GZIP', 'gzip');
                 </ul>
             </div>
         </div>
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5">HEAD (proxy & client)</h2>
+                <p class="small text-muted">Résultat d'une requête <code>HEAD</code> effectuée depuis le navigateur (via fetch). Permet d'observer les en-têtes réellement reçus.</p>
+                <pre id="gzip-head-result" class="bg-light p-3 border rounded small mb-0">Collecte en cours...</pre>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+(async () => {
+    const target = document.getElementById('gzip-head-result');
+    if (!target) return;
+    try {
+        const response = await fetch(window.location.href, {
+            method: 'HEAD',
+            cache: 'no-store',
+            headers: { 'X-Debug-Head': '1' }
+        });
+        const headers = {};
+        response.headers.forEach((value, key) => {
+            headers[key] = value;
+        });
+        target.textContent = JSON.stringify({
+            status: response.status,
+            headers
+        }, null, 2);
+    } catch (error) {
+        target.textContent = 'Impossible de récupérer les en-têtes (HEAD) : ' + error;
+    }
+})();
+</script>
 <?php
 render_footer();
+
+$pageContent = ob_get_clean();
+$uncompressedLength = strlen($pageContent);
+header('X-Uncompressed-Length: ' . $uncompressedLength);
+echo $pageContent;

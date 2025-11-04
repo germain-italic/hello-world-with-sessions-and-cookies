@@ -34,76 +34,120 @@ const DISALLOWED_UPLOAD_EXTENSIONS = [
 // Trusted reverse proxies permitted to access proxy-only diagnostics.
 const TRUSTED_PROXY_IPS = PROXY_CONFIG['trusted_proxy_ips'] ?? [];
 
-// Checklist steps surfaced on the UI to help DevOps teams validate their reverse proxy.
-const TEST_STEPS = [
+// Checklist categories surfaced on the UI to help DevOps teams validate leur reverse proxy.
+const TEST_CATEGORIES = [
     [
-        'title' => 'Accès public',
-        'description' => 'Naviguer sur la page d\'accueil proxifiée et vérifier que les assets Bootstrap sont chargés correctement.',
-        'link' => 'index.php',
+        'key' => 'security',
+        'title' => 'Sécurité & En-têtes',
+        'items' => [
+            [
+                'key' => 'headers',
+                'title' => 'Headers & Cache',
+                'description' => 'Inspecter les en-têtes de sécurité, cache, ETag/Last-Modified et protocole HTTP.',
+                'link' => 'headers-lab.php',
+            ],
+            [
+                'key' => 'cors',
+                'title' => 'CORS Lab',
+                'description' => 'Valider les en-têtes Access-Control-* et la gestion des pré-vols.',
+                'link' => 'cors-lab.php',
+            ],
+            [
+                'key' => 'basic-auth',
+                'title' => 'Basic Auth',
+                'description' => 'Tester le passage des en-têtes Authorization à travers le proxy.',
+                'link' => 'basic-auth-lab.php',
+            ],
+        ],
     ],
     [
-        'title' => 'Connexion via session PHP',
-        'description' => 'Se connecter avec les identifiants et vérifier la persistance de la session sur plusieurs pages.',
-        'link' => 'session-login.php',
+        'key' => 'sessions',
+        'title' => 'Sessions & Interactions',
+        'items' => [
+            [
+                'key' => 'session',
+                'title' => 'Session PHP',
+                'description' => 'Se connecter et vérifier la persistance de session via plusieurs pages.',
+                'link' => 'session-login.php',
+            ],
+            [
+                'key' => 'cookie',
+                'title' => 'Session Cookie',
+                'description' => 'Manipuler le cookie d\'authentification personnalisé et observer les réactions serveur.',
+                'link' => 'cookie-login.php',
+            ],
+            [
+                'key' => 'transfer',
+                'title' => 'Upload & Download',
+                'description' => 'Uploader un fichier, le retélécharger et vérifier l’intégrité à travers le proxy.',
+                'link' => 'transfer-lab.php',
+            ],
+            [
+                'key' => 'logout',
+                'title' => 'Déconnexion',
+                'description' => 'Purger session et cookie de test puis vérifier l’accès direct.',
+                'link' => 'logout.php',
+            ],
+        ],
     ],
     [
-        'title' => 'Connexion via cookie',
-        'description' => 'Initier une session basée sur un cookie custom et contrôler lecture/écriture/modification.',
-        'link' => 'cookie-login.php',
+        'key' => 'network',
+        'title' => 'Réseau & Proxy',
+        'items' => [
+            [
+                'key' => 'ssl',
+                'title' => 'Check HTTPS',
+                'description' => 'Contrôler la terminaison TLS et les en-têtes X-Forwarded-*.',
+                'link' => 'ssl-check.php',
+            ],
+            [
+                'key' => 'network',
+                'title' => 'Trace IP',
+                'description' => 'Comparer REMOTE_ADDR, X-Forwarded-For et X-Real-IP.',
+                'link' => 'network-trace.php',
+            ],
+            [
+                'key' => 'gzip',
+                'title' => 'Compression',
+                'description' => 'Vérifier la compression gzip/brotli et la cohérence Content-Encoding / Content-Length.',
+                'link' => 'gzip-lab.php',
+            ],
+            [
+                'key' => 'proxy',
+                'title' => 'Proxy Only',
+                'description' => 'Accéder à la zone restreinte uniquement via le reverse proxy autorisé.',
+                'link' => 'proxy-only.php',
+            ],
+        ],
     ],
     [
-        'title' => 'Manipulation de session',
-        'description' => 'Ajouter, modifier et supprimer des variables de session et observer la propagation via le proxy.',
-        'link' => 'session-dashboard.php',
-    ],
-    [
-        'title' => 'Manipulation de cookie',
-        'description' => 'Modifier et supprimer manuellement le cookie d\'authentification pour vérifier la réaction côté serveur.',
-        'link' => 'cookie-dashboard.php',
-    ],
-    [
-        'title' => 'Upload de fichier',
-        'description' => 'Uploader un fichier et confirmer qu\'il est conservé et retéléchargeable à travers le proxy.',
-        'link' => 'transfer-lab.php',
-    ],
-    [
-        'title' => 'Download statique',
-        'description' => 'Télécharger le fichier de test pour vérifier les entêtes et l\'intégrité du contenu.',
-        'link' => 'transfer-lab.php',
-    ],
-    [
-        'title' => 'Validation HTTPS',
-        'description' => 'Contrôler que la connexion proxifiée est bien servie en HTTPS et que les en-têtes X-Forwarded-* sont cohérents.',
-        'link' => 'ssl-check.php',
-    ],
-    [
-        'title' => 'URL rewriting',
-        'description' => 'Tester les règles .htaccess via les liens du Rewrite Lab et vérifier les slugs capturés.',
-        'link' => 'rewrite-lab.php',
-    ],
-    [
-        'title' => 'Contrôles CORS',
-        'description' => 'Valider les en-têtes Access-Control-* et les requêtes pré-vol via le reverse proxy.',
-        'link' => 'cors-lab.php',
-    ],
-    [
-        'title' => 'Traçabilité IP',
-        'description' => 'Comparer l\'IP du visiteur, du proxy et la chaîne d\'en-têtes Forwarded/X-Forwarded-For.',
-        'link' => 'network-trace.php',
-    ],
-    [
-        'title' => 'Compression GZIP',
-        'description' => 'Vérifier si la compression est appliquée côté host, proxy ou les deux, et qu\'elle n\'est pas doublonnée.',
-        'link' => 'gzip-lab.php',
-    ],
-    [
-        'title' => 'Tests proxy-only',
-        'description' => 'Accéder à la zone restreinte et vérifier que seul le reverse proxy est autorisé.',
-        'link' => 'proxy-only.php',
-    ],
-    [
-        'title' => 'Déconnexion',
-        'description' => 'Se déconnecter et confirmer la suppression de la session et du cookie, puis retenter un accès direct.',
-        'link' => 'logout.php',
+        'key' => 'routing',
+        'title' => 'Routage & Intégrité',
+        'items' => [
+            [
+                'key' => 'rewrite',
+                'title' => 'Rewrite Lab',
+                'description' => 'Tester les règles .htaccess et vérifier la capture des slugs.',
+                'link' => 'rewrite-lab.php',
+            ],
+            [
+                'key' => 'absolute',
+                'title' => 'Liens absolus',
+                'description' => 'Valider la réécriture des URLs absolues et des assets par le proxy.',
+                'link' => 'absolute-links-lab.php',
+            ],
+            [
+                'key' => 'redirects',
+                'title' => 'Redirections',
+                'description' => 'Contrôler les codes 301/302/307/308 et la cible Location.',
+                'link' => 'redirect-lab.php',
+            ],
+            [
+                'key' => 'fuzz',
+                'title' => 'Robustesse & Fuzz',
+                'description' => 'Envoyer des chemins encodés ou suspects pour détecter les altérations.',
+                'link' => 'fuzz-lab.php',
+            ],
+        ],
     ],
 ];
