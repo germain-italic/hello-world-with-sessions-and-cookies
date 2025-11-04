@@ -66,6 +66,10 @@ const TEST_STEPS = [
         'description' => 'Contrôler que la connexion proxifiée est bien servie en HTTPS et que les en-têtes X-Forwarded-* sont cohérents.',
     ],
     [
+        'title' => 'URL rewriting',
+        'description' => 'Tester les règles .htaccess via les liens du Rewrite Lab et vérifier les slugs capturés.',
+    ],
+    [
         'title' => 'Traçabilité IP',
         'description' => 'Comparer l\'IP du visiteur, du proxy et la chaîne d\'en-têtes Forwarded/X-Forwarded-For.',
     ],

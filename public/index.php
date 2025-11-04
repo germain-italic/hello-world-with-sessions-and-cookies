@@ -84,6 +84,15 @@ render_header('Accueil', 'home');
         </div>
         <div class="card shadow-sm mt-4">
             <div class="card-body">
+                <h2 class="h5">Tests Rewrite</h2>
+                <p class="small text-muted">
+                    Cliquez sur les URLs réécrites pour vérifier que <code>.htaccess</code> applique bien les règles (slug détecté, requête redirigée, download).
+                </p>
+                <a class="btn btn-outline-secondary w-100" href="rewrite-lab.php">Ouvrir Rewrite Lab</a>
+            </div>
+        </div>
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
                 <h2 class="h5">Trace IP &amp; User Agent</h2>
                 <p class="small text-muted">
                     Inspectez les adresses IP injectées par le proxy (`X-Forwarded-For`, `X-Real-IP`) et comparez-les avec `REMOTE_ADDR`.
