@@ -13,9 +13,9 @@ $securityHeaders = [
     'Content-Security-Policy' => "default-src 'self'; "
         . "img-src 'self' data:; "
         . "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
-        . "style-src 'self' 'unsafe-inline' https://use.typekit.net https://cdn.jsdelivr.net; "
+        . "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net https://cdn.jsdelivr.net; "
         . "font-src 'self' data: https://use.typekit.net https://p.typekit.net; "
-        . "connect-src 'self'",
+        . "connect-src 'self' https://cdn.jsdelivr.net https://use.typekit.net https://p.typekit.net",
 ];
 
 foreach ($securityHeaders as $name => $value) {
