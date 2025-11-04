@@ -12,6 +12,7 @@ Mini site de test en PHP/Apache pour valider le comportement d'un reverse proxy 
 - Page de diagnostic HTTPS/SSL pour contrôler les en-têtes `X-Forwarded-*` et la terminaison TLS.
 - Page de traçabilité IP & user agent pour comparer REMOTE_ADDR et les en-têtes `X-Forwarded-For` / `X-Real-IP`.
 - Laboratoire d'URL rewriting (règles `.htaccess`) avec scénarios de test prêts à l'emploi.
+- Zone « proxy-only » accessible uniquement via le reverse proxy déclaré (403 en accès direct).
 - Bouton de déconnexion qui purge session et cookie (regénération d'identifiant de session lors du login).
 - UI basée sur Bootstrap 5 pour une ergonomie rapide.
 
@@ -74,7 +75,8 @@ Points de contrôle recommandés :
 6. **HTTPS** : ouvrir « Check HTTPS » et confirmer la détection d'HTTPS via les variables serveur et les en-têtes `X-Forwarded-*`.
 7. **URL rewriting** : utiliser « Rewrite Lab » et tester les liens `/rewrite/...` pour vérifier que `.htaccess` est interprété correctement.
 8. **Traçabilité IP** : ouvrir « Trace IP » pour comparer l’IP client, celle du proxy et l’ordre des en-têtes `X-Forwarded-For`.
-9. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
+9. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
+10. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
 
 ## Structure
 
@@ -91,3 +93,4 @@ Points de contrôle recommandés :
 - Exécuter `php -S ...` ou un hôte Apache pour valider la syntaxe PHP (PHP 8+ requis).
 - L'upload est plafonné à 5 MB, les extensions exécutables (`.php`, `.sh`, `.exe`, etc.) sont rejetées et les fichiers sont stockés hors racine web (`uploads/`) ; les téléchargements passent via `download-upload.php` avec `Content-Disposition: attachment` et `X-Content-Type-Options: nosniff`.
 - Le laboratoire rewrite nécessite `mod_rewrite` et `AllowOverride All` sur le vhost pour que `.htaccess` soit pris en compte.
+- Dupliquez `.env.dist` vers `.env` et renseignez `TRUSTED_PROXY_IPS` (liste d'IP séparées par des virgules) pour restreindre la zone proxy-only aux reverse proxies autorisés.

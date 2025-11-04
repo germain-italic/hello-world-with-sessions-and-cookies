@@ -31,6 +31,9 @@ const DISALLOWED_UPLOAD_EXTENSIONS = [
     'sh',
 ];
 
+// Trusted reverse proxies permitted to access proxy-only diagnostics.
+const TRUSTED_PROXY_IPS = PROXY_CONFIG['trusted_proxy_ips'] ?? [];
+
 // Checklist steps surfaced on the UI to help DevOps teams validate their reverse proxy.
 const TEST_STEPS = [
     [
@@ -82,6 +85,11 @@ const TEST_STEPS = [
         'title' => 'Traçabilité IP',
         'description' => 'Comparer l\'IP du visiteur, du proxy et la chaîne d\'en-têtes Forwarded/X-Forwarded-For.',
         'link' => 'network-trace.php',
+    ],
+    [
+        'title' => 'Tests proxy-only',
+        'description' => 'Accéder à la zone restreinte et vérifier que seul le reverse proxy est autorisé.',
+        'link' => 'proxy-only.php',
     ],
     [
         'title' => 'Déconnexion',

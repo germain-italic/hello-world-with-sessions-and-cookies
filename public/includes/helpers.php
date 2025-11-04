@@ -159,6 +159,46 @@ function clear_auth_cookie(): void
     unset($_COOKIE[COOKIE_AUTH_NAME]);
 }
 
+function is_trusted_proxy_request(): bool
+{
+    $trustedIps = TRUSTED_PROXY_IPS;
+    if (empty($trustedIps)) {
+        return false;
+    }
+
+    $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
+    if ($remoteAddr && in_array($remoteAddr, $trustedIps, true)) {
+        return true;
+    }
+
+    // Optional check: some proxies may set X-Forwarded-By to themselves.
+    $forwardedBy = $_SERVER['HTTP_X_FORWARDED_BY'] ?? '';
+    if ($forwardedBy && in_array(trim($forwardedBy), $trustedIps, true)) {
+        return true;
+    }
+
+    return false;
+}
+
+function require_trusted_proxy_access(): void
+{
+    if (is_trusted_proxy_request()) {
+        return;
+    }
+
+    http_response_code(403);
+    render_header('Accès refusé', 'proxy');
+    ?>
+    <div class="alert alert-danger">
+        Accès réservé : cette section doit être appelée via le reverse proxy autorisé.
+    </div>
+    <p class="text-muted">IP détectée : <code><?= htmlspecialchars($_SERVER['REMOTE_ADDR'] ?? 'inconnue') ?></code></p>
+    <p class="text-muted">Veuillez passer par l'URL proxifiée configurée sur votre reverse proxy.</p>
+    <?php
+    render_footer();
+    exit;
+}
+
 function redirect_with_status(string $target, string $status, string $message): void
 {
     header('Location: ' . $target . '?status=' . urlencode($status) . '&message=' . urlencode($message));
@@ -227,6 +267,9 @@ function render_header(string $title, string $active = ''): void
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $active === 'rewrite' ? 'active' : '' ?>" href="rewrite-lab.php">Rewrite Lab</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active === 'proxy' ? 'active' : '' ?>" href="proxy-only.php">Proxy Only</a>
                     </li>
                 </ul>
                 <div class="d-flex gap-2">

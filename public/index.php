@@ -30,6 +30,7 @@ $forwardedFor = trim((string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''));
 $forwardedIps = $forwardedFor !== '' ? array_filter(array_map('trim', explode(',', $forwardedFor))) : [];
 $clientIp = $forwardedIps[0] ?? $remoteAddr;
 $proxyIp = $remoteAddr;
+$viaTrustedProxy = is_trusted_proxy_request();
 
 $statusSummaries = [
     [
@@ -69,6 +70,16 @@ $statusSummaries = [
         'badge_text' => $forwardedIps ? 'proxifié' : 'direct',
         'link' => 'network-trace.php',
         'link_label' => 'Inspecter les en-têtes IP',
+    ],
+    [
+        'title' => 'Proxy-only',
+        'state' => $viaTrustedProxy
+            ? 'IP proxy autorisée détectée (' . $proxyIp . ')'
+            : 'Accès direct · proxy attendu : ' . (TRUSTED_PROXY_IPS[0] ?? 'config'),
+        'badge_variant' => $viaTrustedProxy ? 'success' : 'warning',
+        'badge_text' => $viaTrustedProxy ? 'ok' : 'direct',
+        'link' => 'proxy-only.php',
+        'link_label' => 'Tester la zone proxy-only',
     ],
 ];
 
