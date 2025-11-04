@@ -193,6 +193,7 @@ function render_header(string $title, string $active = ''): void
         <link rel="stylesheet" href="https://use.typekit.net/nbo4uai.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="assets/css/theme.css">
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
     </head>
     <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
