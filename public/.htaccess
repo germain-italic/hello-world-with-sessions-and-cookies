@@ -1,11 +1,13 @@
 RewriteEngine On
 
-# Allow direct access to existing files and directories.
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Friendly URL examples for the rewrite lab.
 RewriteRule ^rewrite/test/([a-z0-9-]+)/?$ rewrite-lab.php?scenario=$1 [QSA,L]
 RewriteRule ^rewrite/status/?$ rewrite-lab.php?scenario=status [QSA,L]
 RewriteRule ^rewrite/download/?$ download.php?file=proxy-test.txt [QSA,L]
+
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%1]
+CGIPassAuth On
