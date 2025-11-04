@@ -6,6 +6,32 @@ require_once __DIR__ . '/includes/bootstrap.php';
 
 $providedUser = $_SERVER['PHP_AUTH_USER'] ?? null;
 $providedPassword = $_SERVER['PHP_AUTH_PW'] ?? null;
+$rawAuthorization = $_SERVER['HTTP_AUTHORIZATION']
+    ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+    ?? $_SERVER['HTTP_X_FORWARDED_AUTHORIZATION']
+    ?? null;
+
+if ($rawAuthorization === null && function_exists('getallheaders')) {
+    $allHeaders = getallheaders();
+    if ($allHeaders) {
+        $allHeadersLower = array_change_key_case($allHeaders, CASE_LOWER);
+        if (isset($allHeadersLower['authorization'])) {
+            $rawAuthorization = $rawAuthorization ?? $allHeadersLower['authorization'];
+        }
+    }
+}
+
+if (($providedUser === null || $providedPassword === null) && $rawAuthorization) {
+    if (stripos($rawAuthorization, 'basic ') === 0) {
+        $encoded = substr($rawAuthorization, 6);
+        $decoded = base64_decode($encoded, true);
+        if ($decoded !== false) {
+            [$userDecoded, $passDecoded] = array_pad(explode(':', $decoded, 2), 2, null);
+            $providedUser = $providedUser ?? $userDecoded;
+            $providedPassword = $providedPassword ?? $passDecoded;
+        }
+    }
+}
 
 if ($providedUser !== TEST_USER || $providedPassword !== TEST_PASSWORD) {
     header('WWW-Authenticate: Basic realm="Reverse Proxy Lab"');
@@ -24,6 +50,13 @@ if ($providedUser !== TEST_USER || $providedPassword !== TEST_PASSWORD) {
         <p>Le serveur attend une authentification BASIC transmise via le reverse proxy.</p>
         <p>Utilisez les identifiants de test : <code><?= htmlspecialchars(TEST_USER) ?></code> / <code><?= htmlspecialchars(TEST_PASSWORD) ?></code>.</p>
         <p class="small">Astuce : <code>curl -u <?= htmlspecialchars(TEST_USER) ?>:<?= htmlspecialchars(TEST_PASSWORD) ?> https://votre-proxy/basic-auth-lab.php</code></p>
+        <?php if ($rawAuthorization === null): ?>
+            <p class="small text-danger">
+                Aucun en-tête <code>Authorization</code> n'a été reçu. Vérifiez la configuration du reverse proxy (ex.&nbsp;: <code>proxy_set_header Authorization $http_authorization;</code>).
+            </p>
+        <?php else: ?>
+            <p class="small text-success">En-tête reçu : <code><?= htmlspecialchars($rawAuthorization) ?></code></p>
+        <?php endif; ?>
     </div>
     </body>
     </html>
@@ -31,7 +64,7 @@ if ($providedUser !== TEST_USER || $providedPassword !== TEST_PASSWORD) {
     exit;
 }
 
-$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+$authHeader = $rawAuthorization;
 $forwardedAuth = $_SERVER['HTTP_PROXY_AUTHORIZATION'] ?? null;
 
 render_header('Basic Auth Lab', 'basic-auth');
