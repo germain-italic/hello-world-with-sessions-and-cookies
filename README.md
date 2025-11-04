@@ -13,6 +13,7 @@ Mini site de test en PHP/Apache pour valider le comportement d'un reverse proxy 
 - Page de traçabilité IP & user agent pour comparer REMOTE_ADDR et les en-têtes `X-Forwarded-For` / `X-Real-IP`.
 - Laboratoire d'URL rewriting (règles `.htaccess`) avec scénarios de test prêts à l'emploi.
 - Zone « proxy-only » accessible uniquement via le reverse proxy déclaré (403 en accès direct).
+- Page de diagnostic compression (GZIP/Brotli) pour vérifier la négociation et l'application côté host/proxy.
 - Bouton de déconnexion qui purge session et cookie (regénération d'identifiant de session lors du login).
 - UI basée sur Bootstrap 5 pour une ergonomie rapide.
 
@@ -75,8 +76,9 @@ Points de contrôle recommandés :
 6. **HTTPS** : ouvrir « Check HTTPS » et confirmer la détection d'HTTPS via les variables serveur et les en-têtes `X-Forwarded-*`.
 7. **URL rewriting** : utiliser « Rewrite Lab » et tester les liens `/rewrite/...` pour vérifier que `.htaccess` est interprété correctement.
 8. **Traçabilité IP** : ouvrir « Trace IP » pour comparer l’IP client, celle du proxy et l’ordre des en-têtes `X-Forwarded-For`.
-9. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
-10. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
+9. **Compression** : ouvrir « GZIP Lab » pour vérifier l'encodage (`Content-Encoding`, `Via`, négociation `Accept-Encoding`).
+10. **Proxy-only** : tester « Proxy Only » ; l'accès direct doit renvoyer 403, l'accès via proxy doit fonctionner.
+11. **Déconnexion** : utiliser le bouton « Déconnexion », s'assurer que la session et le cookie sont invalidés, puis tester un accès direct aux pages privées.
 
 ## Structure
 

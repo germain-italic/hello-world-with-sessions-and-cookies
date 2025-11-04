@@ -31,6 +31,8 @@ $forwardedIps = $forwardedFor !== '' ? array_filter(array_map('trim', explode(',
 $clientIp = $forwardedIps[0] ?? $remoteAddr;
 $proxyIp = $remoteAddr;
 $viaTrustedProxy = is_trusted_proxy_request();
+$contentEncoding = $_SERVER['HTTP_CONTENT_ENCODING'] ?? '';
+$viaHeader = $_SERVER['HTTP_VIA'] ?? '';
 
 $statusSummaries = [
     [
@@ -80,6 +82,16 @@ $statusSummaries = [
         'badge_text' => $viaTrustedProxy ? 'ok' : 'direct',
         'link' => 'proxy-only.php',
         'link_label' => 'Tester la zone proxy-only',
+    ],
+    [
+        'title' => 'Compression',
+        'state' => $contentEncoding
+            ? 'Encodage détecté : ' . $contentEncoding . ($viaHeader ? ' · Via: ' . $viaHeader : '')
+            : 'Pas de Content-Encoding signalé',
+        'badge_variant' => $contentEncoding ? 'success' : 'secondary',
+        'badge_text' => $contentEncoding ? 'compressé' : 'brut',
+        'link' => 'gzip-lab.php',
+        'link_label' => 'Analyser la compression',
     ],
 ];
 

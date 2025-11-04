@@ -87,6 +87,11 @@ const TEST_STEPS = [
         'link' => 'network-trace.php',
     ],
     [
+        'title' => 'Compression GZIP',
+        'description' => 'Vérifier si la compression est appliquée côté host, proxy ou les deux, et qu\'elle n\'est pas doublonnée.',
+        'link' => 'gzip-lab.php',
+    ],
+    [
         'title' => 'Tests proxy-only',
         'description' => 'Accéder à la zone restreinte et vérifier que seul le reverse proxy est autorisé.',
         'link' => 'proxy-only.php',
