@@ -36,45 +36,56 @@ const TEST_STEPS = [
     [
         'title' => 'Accès public',
         'description' => 'Naviguer sur la page d\'accueil proxifiée et vérifier que les assets Bootstrap sont chargés correctement.',
+        'link' => 'index.php',
     ],
     [
         'title' => 'Connexion via session PHP',
         'description' => 'Se connecter avec les identifiants et vérifier la persistance de la session sur plusieurs pages.',
+        'link' => 'session-login.php',
     ],
     [
         'title' => 'Connexion via cookie',
         'description' => 'Initier une session basée sur un cookie custom et contrôler lecture/écriture/modification.',
+        'link' => 'cookie-login.php',
     ],
     [
         'title' => 'Manipulation de session',
         'description' => 'Ajouter, modifier et supprimer des variables de session et observer la propagation via le proxy.',
+        'link' => 'session-dashboard.php',
     ],
     [
         'title' => 'Manipulation de cookie',
         'description' => 'Modifier et supprimer manuellement le cookie d\'authentification pour vérifier la réaction côté serveur.',
+        'link' => 'cookie-dashboard.php',
     ],
     [
         'title' => 'Upload de fichier',
         'description' => 'Uploader un fichier et confirmer qu\'il est conservé et retéléchargeable à travers le proxy.',
+        'link' => 'transfer-lab.php',
     ],
     [
         'title' => 'Download statique',
         'description' => 'Télécharger le fichier de test pour vérifier les entêtes et l\'intégrité du contenu.',
+        'link' => 'transfer-lab.php',
     ],
     [
         'title' => 'Validation HTTPS',
         'description' => 'Contrôler que la connexion proxifiée est bien servie en HTTPS et que les en-têtes X-Forwarded-* sont cohérents.',
+        'link' => 'ssl-check.php',
     ],
     [
         'title' => 'URL rewriting',
         'description' => 'Tester les règles .htaccess via les liens du Rewrite Lab et vérifier les slugs capturés.',
+        'link' => 'rewrite-lab.php',
     ],
     [
         'title' => 'Traçabilité IP',
         'description' => 'Comparer l\'IP du visiteur, du proxy et la chaîne d\'en-têtes Forwarded/X-Forwarded-For.',
+        'link' => 'network-trace.php',
     ],
     [
         'title' => 'Déconnexion',
         'description' => 'Se déconnecter et confirmer la suppression de la session et du cookie, puis retenter un accès direct.',
+        'link' => 'logout.php',
     ],
 ];

@@ -190,12 +190,17 @@ function render_header(string $title, string $active = ''): void
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= htmlspecialchars($title) ?> · Reverse Proxy Lab</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.typekit.net/nbo4uai.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/css/theme.css">
     </head>
     <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Hello Proxy</a>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
+                <img src="assets/img/italic-logo-512x512.png" alt="Italic" class="navbar-brand-logo">
+                <span>Hello Proxy</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -219,6 +224,9 @@ function render_header(string $title, string $active = ''): void
                     <li class="nav-item">
                         <a class="nav-link <?= $active === 'network' ? 'active' : '' ?>" href="network-trace.php">Trace IP</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $active === 'rewrite' ? 'active' : '' ?>" href="rewrite-lab.php">Rewrite Lab</a>
+                    </li>
                 </ul>
                 <div class="d-flex gap-2">
                     <a class="btn btn-outline-light btn-sm" href="logout.php">Déconnexion</a>
@@ -240,12 +248,16 @@ function render_footer(): void
 {
     ?>
     </main>
-    <footer class="bg-dark text-white py-3 mt-auto">
-        <div class="container text-center small">
-            Reverse Proxy Test Lab · PHP <?= htmlspecialchars(PHP_VERSION) ?>
+    <footer class="py-3 mt-auto text-white">
+        <div class="container text-center small d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
+            <span>Reverse Proxy Test Lab</span>
+            <span class="footer-separator">•</span>
+            <a class="footer-link" href="https://italic.fr" target="_blank" rel="noopener">© Italic Coding Forward</a>
+            <span class="footer-separator">•</span>
+            <a class="footer-link" href="https://github.com/germain-italic/hello-world-with-sessions-and-cookies" target="_blank" rel="noopener">Code source sur GitHub</a>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w72k4zU+0L0BT29IOpc5LD97nDz4NmzPTlZ4H7aBlJYQG2nERFsdQUi1Bj47jKX8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     </body>
     </html>
     <?php
@@ -257,7 +269,14 @@ function render_test_steps(): void
     <ol class="list-group list-group-numbered">
         <?php foreach (TEST_STEPS as $step): ?>
             <li class="list-group-item">
-                <div class="fw-semibold"><?= htmlspecialchars($step['title']) ?></div>
+                <?php if (!empty($step['link'])): ?>
+                    <a class="fw-semibold d-inline-flex align-items-center gap-2 text-decoration-none" href="<?= htmlspecialchars($step['link']) ?>">
+                        <?= htmlspecialchars($step['title']) ?>
+                        <span class="badge bg-light text-dark border">ouvrir</span>
+                    </a>
+                <?php else: ?>
+                    <div class="fw-semibold"><?= htmlspecialchars($step['title']) ?></div>
+                <?php endif; ?>
                 <div class="small text-muted"><?= htmlspecialchars($step['description']) ?></div>
             </li>
         <?php endforeach; ?>

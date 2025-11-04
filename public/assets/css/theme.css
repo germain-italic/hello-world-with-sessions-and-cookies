@@ -1,0 +1,183 @@
+:root {
+    --italic-midnight: #003399;
+    --italic-turquoise: #009fe3;
+    --italic-turquoise-light: #d1f5ff;
+    --italic-raspberry: #ff0055;
+    --italic-raspberry-dark: #b80026;
+    --italic-raspberry-light: #ffe4e5;
+    --italic-gray-1: #333333;
+    --italic-gray-2: #666666;
+    --italic-gray-3: #999999;
+    --italic-gray-4: #cccccc;
+    --italic-gray-5: #eeeeee;
+    --italic-white: #ffffff;
+
+    --bs-body-font-family: "futura-pt", "Nunito Sans", Arial, sans-serif;
+    --bs-body-color: var(--italic-gray-1);
+    --bs-body-bg: #f5f7ff;
+    --bs-link-color: var(--italic-midnight);
+    --bs-link-hover-color: var(--italic-raspberry-dark);
+    --bs-link-decoration: none;
+    --bs-border-color: rgba(0, 51, 153, 0.12);
+}
+
+body {
+    font-family: var(--bs-body-font-family);
+    background: linear-gradient(180deg, #f5f7ff 0%, #ffffff 60%);
+    color: var(--italic-gray-1);
+}
+
+.navbar {
+    background: linear-gradient(90deg, var(--italic-midnight), var(--italic-turquoise));
+    box-shadow: 0 4px 20px rgba(0, 51, 153, 0.25);
+}
+
+.navbar-brand-logo {
+    height: 36px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.navbar-brand,
+.navbar-dark .navbar-nav .nav-link {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--italic-turquoise-light);
+}
+
+.card {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 63, 153, 0.08);
+    box-shadow: 0 12px 35px rgba(0, 51, 153, 0.12);
+}
+
+.card-title {
+    color: var(--italic-midnight);
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--italic-midnight), var(--italic-turquoise));
+    border: none;
+    box-shadow: 0 8px 18px rgba(0, 63, 153, 0.22);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, var(--italic-raspberry-dark), var(--italic-raspberry));
+}
+
+.btn-outline-secondary {
+    border-color: var(--italic-midnight);
+    color: var(--italic-midnight);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    background: var(--italic-midnight);
+    color: var(--italic-white);
+}
+
+.badge.bg-light {
+    background-color: var(--italic-turquoise-light) !important;
+    color: var(--italic-midnight) !important;
+    border: 1px solid rgba(0, 51, 153, 0.15);
+}
+
+.list-group-item {
+    border-color: rgba(0, 63, 153, 0.08);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.list-group-item:hover {
+    background-color: rgba(209, 245, 255, 0.5);
+}
+
+.alert-info {
+    background-color: var(--italic-turquoise-light);
+    border-color: rgba(0, 63, 153, 0.2);
+    color: var(--italic-midnight);
+}
+
+.alert-danger {
+    background-color: var(--italic-raspberry-light);
+    border-color: var(--italic-raspberry-dark);
+    color: var(--italic-raspberry-dark);
+}
+
+footer {
+    background: linear-gradient(90deg, var(--italic-midnight), #001a66);
+}
+
+.footer-separator {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.footer-link:hover,
+.footer-link:focus {
+    color: var(--italic-turquoise-light);
+    text-decoration: underline;
+}
+
+code {
+    background-color: rgba(0, 63, 153, 0.08);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+    font-weight: 500;
+    color: var(--italic-midnight);
+}
+
+.table thead th {
+    border-bottom-width: 1px;
+    color: var(--italic-midnight);
+    font-weight: 600;
+}
+
+.btn-outline-primary {
+    color: var(--italic-midnight);
+    border-color: var(--italic-midnight);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background: var(--italic-midnight);
+    color: var(--italic-white);
+}
+
+.btn-outline-danger {
+    border-color: var(--italic-raspberry-dark);
+    color: var(--italic-raspberry-dark);
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+    background: var(--italic-raspberry-dark);
+    color: var(--italic-white);
+}
+
+.btn-outline-success {
+    border-color: var(--italic-turquoise);
+    color: var(--italic-turquoise);
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+    background: var(--italic-turquoise);
+    color: var(--italic-white);
+}
+
+.list-group-numbered > .list-group-item::before {
+    background: linear-gradient(135deg, var(--italic-midnight), var(--italic-turquoise));
+    color: var(--italic-white);
+}
+
+.small.text-muted {
+    color: var(--italic-gray-2) !important;
+}
