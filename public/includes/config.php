@@ -66,6 +66,10 @@ const TEST_STEPS = [
         'description' => 'Contrôler que la connexion proxifiée est bien servie en HTTPS et que les en-têtes X-Forwarded-* sont cohérents.',
     ],
     [
+        'title' => 'Traçabilité IP',
+        'description' => 'Comparer l\'IP du visiteur, du proxy et la chaîne d\'en-têtes Forwarded/X-Forwarded-For.',
+    ],
+    [
         'title' => 'Déconnexion',
         'description' => 'Se déconnecter et confirmer la suppression de la session et du cookie, puis retenter un accès direct.',
     ],

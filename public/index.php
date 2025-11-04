@@ -82,6 +82,16 @@ render_header('Accueil', 'home');
                 <a class="btn btn-outline-secondary w-100" href="ssl-check.php">Ouvrir Check HTTPS</a>
             </div>
         </div>
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h2 class="h5">Trace IP &amp; User Agent</h2>
+                <p class="small text-muted">
+                    Inspectez les adresses IP injectées par le proxy (`X-Forwarded-For`, `X-Real-IP`) et comparez-les avec `REMOTE_ADDR`.
+                    Vérifiez aussi que le user agent n'est pas modifié.
+                </p>
+                <a class="btn btn-outline-secondary w-100" href="network-trace.php">Ouvrir Trace IP</a>
+            </div>
+        </div>
     </div>
 </div>
 <?php
