@@ -1,0 +1,10 @@
+Reverse proxy download check.
+
+Expected content:
+- Current timestamp is embedded by Apache logs only.
+- File should download without corruption.
+
+Use this file to verify:
+1. HTTP headers (Content-Type, Content-Length).
+2. Byte integrity through the proxy.
+3. Caching behaviour if applicable.
